@@ -178,21 +178,21 @@ def deleteTour(request, pk):
 
 
 @extend_schema(
-	parameters=[
-		OpenApiParameter("page"),
-		
-		OpenApiParameter("size"),
-  ],
-	request=TourListSerializer,
-	responses=TourListSerializer
+    parameters=[
+        OpenApiParameter("page"),
+        OpenApiParameter("size"),
+    ],
+    request=TourListSerializer,
+    responses=TourListSerializer
 )
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 # @has_permissions([PermissionEnum.PERMISSION_LIST_VIEW.name])
 def getAvailableTours(request):
-    start_date = request.GET.get("start_date")  # Use request.GET
-    end_date = request.GET.get("end_date")  # Use request.GET
+    start_date = request.GET.get("start_date")
+    end_date = request.GET.get("end_date")
 
+    # Filter tours based on start and end dates
     if start_date and end_date:
         tours = Tour.objects.filter(available_date__range=[start_date, end_date])
     elif start_date:
@@ -202,20 +202,26 @@ def getAvailableTours(request):
     else:
         return Response({"error": "Please provide a start or end date"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Pagination
-    page = request.GET.get("page")  # Use request.GET
-    size = request.GET.get("size")  # Use request.GET
+    # Calculate total elements before pagination
+    total_elements = tours.count()  # Count the items before pagination
+
+    # Initialize pagination
+    page = request.GET.get("page")
+    size = request.GET.get("size")
     pagination = Pagination()
     pagination.page = page
     pagination.size = size
-    tours = pagination.paginate_data(tours)
 
-    serializer = TourListSerializer(tours, many=True)
+    # Apply pagination to the queryset
+    paginated_tours = pagination.paginate_data(tours)
+
+    # Serialize the paginated data
+    serializer = TourListSerializer(paginated_tours, many=True)
     response = {
         'tours': serializer.data,
         'page': pagination.page,
         'size': pagination.size,
         'total_pages': pagination.total_pages,
-        'total_elements': tours.count(),
+        'total_elements': total_elements,  # Total elements before pagination
     }
     return Response(response, status=status.HTTP_200_OK)
