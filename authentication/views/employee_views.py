@@ -78,9 +78,6 @@ def getAllEmployeeWithoutPagination(request):
 
 	return Response({'employees': serializer.data}, status=status.HTTP_200_OK)
 
-
-
-
 @extend_schema(request=EmployeeSerializer, responses=EmployeeSerializer)
 @api_view(['GET'])
 # @permission_classes([IsAdminUser])

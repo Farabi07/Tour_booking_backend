@@ -56,9 +56,6 @@ def getAllArea(request):
 
 	return Response(response, status=status.HTTP_200_OK)
 
-
-
-
 @extend_schema(
 	parameters=[
 		OpenApiParameter("page"),
@@ -78,8 +75,6 @@ def getAllAreaWithoutPagination(request):
 	return Response({'areas': serializer.data}, status=status.HTTP_200_OK)
 
 
-
-
 @extend_schema(request=AreaSerializer, responses=AreaSerializer)
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
@@ -91,8 +86,6 @@ def getAArea(request, pk):
 		return Response(serializer.data, status=status.HTTP_200_OK)
 	except ObjectDoesNotExist:
 		return Response({'detail': f"Area id - {pk} doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 @extend_schema(request=AreaSerializer, responses=AreaSerializer)
@@ -130,8 +123,6 @@ def searchArea(request):
 		return Response(response, status=status.HTTP_200_OK)
 	else:
 		return Response({'detail': f"There are no areas matching your search"}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 @extend_schema(request=AreaSerializer, responses=AreaSerializer)

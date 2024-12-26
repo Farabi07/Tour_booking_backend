@@ -100,9 +100,6 @@ def getAllUser(request):
 
 	return Response(response, status=status.HTTP_200_OK)
 
-
-
-
 @extend_schema(
 	parameters=[
 		OpenApiParameter("page"),

@@ -215,6 +215,12 @@ def createPayment(request, order_id):
             "failure": "https://yourwebsite.com/payment-failure"
         }
     }
+    # Klarna sandbox API endpoint
+    klarna_sandbox_url = "https://api.playground.klarna.com/payments/v1/sessions"
+
+    # Use Klarna sandbox credentials
+    klarna_api_user = "YOUR_TEST_KLARNA_API_USER"       # Replace with your Klarna sandbox username
+    klarna_api_password = "YOUR_TEST_KLARNA_API_PASSWORD"  # Replace with your Klarna sandbox password
 
     response = requests.post(
         "https://api.klarna.com/payments/v1/sessions", 
